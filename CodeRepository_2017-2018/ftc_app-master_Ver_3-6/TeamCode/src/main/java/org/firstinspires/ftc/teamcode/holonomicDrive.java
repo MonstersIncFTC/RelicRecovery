@@ -161,10 +161,10 @@ public class holonomicDrive extends OpMode {
 
 
         //
-        if (gamepad1.left_trigger)
-            .setPower();
-        else if gamepad1.right_trigger)
-            .setPower();
+       // if (gamepad1.left_trigger)
+        //    .setPower();
+      //  else if gamepad1.right_trigger)
+        //    .setPower();
 
 
 

@@ -5,6 +5,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -30,12 +31,35 @@ import com.qualcomm.robotcore.util.Range;
 public class holonomicDrive extends OpMode {
 
 
-    DcMotor motorFrontRight;
-    DcMotor motorFrontLeft;
-    DcMotor motorBackRight;
-    DcMotor motorBackLeft;
+
+    public  DcMotor motorFrontRight;
+    public DcMotor motorFrontLeft;
+    public DcMotor motorBackRight;
+    public DcMotor motorBackLeft;
+
+    public DcMotor motorMainLift;
+
+    public  DcMotor motorgRight;
+    public  DcMotor motorgLeft;
+    public Servo leftArm;
+    public Servo rightArm;
+
+
+    //lift values
+    private final double LIFT_UP = 0.75;
+    private final double LIFT_DOWN = -0.75;
+
+    // servo values
+    private static final double MID_SERVO =  0.5 ;
+
+    //grabber values
+    private final double suckIn =1.0;
+    private final double pushOut =-1.0;
 
     /* Constructor*/
+
+
+
 
     public holonomicDrive() {
 
@@ -47,24 +71,48 @@ public class holonomicDrive extends OpMode {
 
 
         // hardWareMap for DC motors see diagram above
-
+        // drive train hm
         motorFrontRight = hardwareMap.get(DcMotor.class, "FrontRight");
         motorFrontLeft = hardwareMap.get(DcMotor.class, "FrontLeft");
         motorBackRight = hardwareMap.get(DcMotor.class, "BackRight");
         motorBackLeft = hardwareMap.get(DcMotor.class, "BackLeft");
+
+       // lift hm
+        motorMainLift = hardwareMap.get(DcMotor.class, "MainLift");
+
+       //grabber hm
+        motorgRight = hardwareMap.get(DcMotor.class, "gRight");
+        motorgLeft = hardwareMap.get(DcMotor.class, "gLeft");
+
+        // servo arms
+        leftArm = hardwareMap.get(Servo.class, "leftArm");
+       rightArm = hardwareMap.get(Servo.class, "rightArm");
+
 
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
         motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
         motorBackRight.setDirection(DcMotor.Direction.REVERSE);
 
+        // lift inst
+       motorMainLift.setDirection(DcMotor.Direction.REVERSE);
 
+        // grabber int
+       motorgRight.setDirection(DcMotor.Direction.FORWARD);
+       motorgLeft.setDirection(DcMotor.Direction.FORWARD);//
 
+        // servo arm inst
+        leftArm.setPosition(MID_SERVO);
+        rightArm.setPosition(MID_SERVO);
 
     }
 
     @Override
+
+
     public void loop() {
+
+
         // left stick controls direction
         // right stick controls rotation
 
@@ -79,6 +127,10 @@ public class holonomicDrive extends OpMode {
         float BackRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
         float BackLeft = -gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
 
+        //lift controls
+
+
+
         //Right and Left values never exceed +/- 1
 
         FrontLeft = Range.clip(FrontLeft, -1, 1);
@@ -92,12 +144,28 @@ public class holonomicDrive extends OpMode {
         BackLeft = -(float) scaleInput(BackLeft);
         BackRight  = -(float) scaleInput(BackRight);
 
-
         //motor values
         motorFrontLeft.setPower(FrontLeft);
         motorFrontRight.setPower(FrontRight);
         motorBackLeft.setPower(BackLeft);
         motorBackRight.setPower(BackRight);
+
+
+        //lift inputs from controller
+        if (gamepad1.y)
+            motorMainLift.setPower(LIFT_UP);
+        else if (gamepad1.a)
+            motorMainLift.setPower(LIFT_DOWN);
+        else
+            motorMainLift.setPower(0.0);
+
+
+        //
+        if (gamepad1.left_trigger)
+            .setPower();
+        else if gamepad1.right_trigger)
+            .setPower();
+
 
 
 
@@ -110,6 +178,8 @@ public class holonomicDrive extends OpMode {
         telemetry.addData("f right pwr","front right pwr: "+String.format("%.2f",FrontRight));
 		telemetry.addData("b right pwr","back right pwr: "+String.format("%.2f",BackRight));
 		telemetry.addData("b left pwr","back left pwr: "+String.format("%.2f",BackLeft));
+       // telemetry.addData( "liftUp", "button y" + String.format());
+        // telemetry.addData( "liftdown", "button y" + String.format());
 
 }
     @Override

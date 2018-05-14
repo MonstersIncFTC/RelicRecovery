@@ -39,8 +39,8 @@ public class holonomicDrive extends OpMode {
 
     public DcMotor motorMainLift;
 
-    public  DcMotor motorgRight;
-    public  DcMotor motorgLeft;
+    public  DcMotor motorGrabberRight;
+    public  DcMotor motorGrabberLeft;
     public Servo leftArm;
     public Servo rightArm;
 
@@ -50,11 +50,13 @@ public class holonomicDrive extends OpMode {
     private final double LIFT_DOWN = -0.75;
 
     // servo values
-    private static final double MID_SERVO =  0.5 ;
+    private static final double Open_Servo =  0.3 ;
+    private static final double Close_Servo =  0.7 ;
+
 
     //grabber values
-    private final double suckIn =1.0;
-    private final double pushOut =-1.0;
+    public float leftTrigger;
+    public float rightTtrigger;
 
     /* Constructor*/
 
@@ -81,8 +83,8 @@ public class holonomicDrive extends OpMode {
         motorMainLift = hardwareMap.get(DcMotor.class, "MainLift");
 
        //grabber hm
-        motorgRight = hardwareMap.get(DcMotor.class, "gRight");
-        motorgLeft = hardwareMap.get(DcMotor.class, "gLeft");
+       motorGrabberLeft = hardwareMap.get(DcMotor.class, "leftGrabber");
+        motorGrabberRight = hardwareMap.get(DcMotor.class, "rightGrabber");
 
         // servo arms
         leftArm = hardwareMap.get(Servo.class, "leftArm");
@@ -95,15 +97,15 @@ public class holonomicDrive extends OpMode {
         motorBackRight.setDirection(DcMotor.Direction.REVERSE);
 
         // lift inst
-       motorMainLift.setDirection(DcMotor.Direction.REVERSE);
+        motorMainLift.setDirection(DcMotor.Direction.REVERSE);
 
         // grabber int
-       motorgRight.setDirection(DcMotor.Direction.FORWARD);
-       motorgLeft.setDirection(DcMotor.Direction.FORWARD);//
+        motorGrabberLeft.setDirection(DcMotor.Direction.FORWARD);
+        motorGrabberRight.setDirection(DcMotor.Direction.FORWARD);//
 
         // servo arm inst
-        leftArm.setPosition(MID_SERVO);
-        rightArm.setPosition(MID_SERVO);
+        leftArm.setPosition(0.3);
+        rightArm.setPosition(0.3);
 
     }
 
@@ -152,19 +154,31 @@ public class holonomicDrive extends OpMode {
 
 
         //lift inputs from controller
-        if (gamepad1.y)
+        if (gamepad1.y){
             motorMainLift.setPower(LIFT_UP);
-        else if (gamepad1.a)
+        } else if (gamepad1.a){
             motorMainLift.setPower(LIFT_DOWN);
-        else
+        }else{
             motorMainLift.setPower(0.0);
+        }
+
+        // arms
+
+        // grabber
 
 
-        //
-       // if (gamepad1.left_trigger)
-        //    .setPower();
-      //  else if gamepad1.right_trigger)
-        //    .setPower();
+        if(gamepad1.left_trigger > .75) {
+            motorGrabberLeft.setPower(1.0);
+            motorGrabberRight.setPower(-1.0);
+        }
+        else if (gamepad1.right_trigger >.75){
+            motorGrabberLeft.setPower(-1.0);
+            motorGrabberRight.setPower(+1.0);
+        }
+        else{
+            motorGrabberLeft.setPower(0);
+            motorGrabberRight.setPower(0);
+        }
 
 
 

@@ -162,7 +162,17 @@ public class holonomicDrive extends OpMode {
             motorMainLift.setPower(0.0);
         }
 
-        // arms
+        // arms values need testing.
+        if (gamepad1.right_bumper){
+            rightArm.setPosition(.3);
+            leftArm.setPosition(.3);
+        } else if (gamepad1.left_bumper){
+            rightArm.setPosition(.5);
+            leftArm.setPosition(.5);
+        }else{
+            rightArm.setPosition(0);
+            leftArm.setPosition(0);
+        }
 
         // grabber
 
